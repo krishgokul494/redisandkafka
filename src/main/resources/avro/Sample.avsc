@@ -1,0 +1,8 @@
+{
+  "namespace": "com.sample.redisandkafka",
+  "type": "record",
+  "name": "SampleEvent",
+  "fields": [
+    {"name": "field", "type": "string", "default": "null"}
+  ]
+}

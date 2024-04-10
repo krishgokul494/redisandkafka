@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: redisandkafka
+  main:
+    allow-bean-definition-overriding: true
+
+  cache:
+    cache-names: sample-cache
+    default-ttl: 1 # TTL in hours
+    enabled: true
+    type: redis
+    host: localhost
+    port: 6379
+    caches-ttl: # TTL in hours
+      sample-cache: 1
+
+  cloud:
+    stream:
+      schemaRegistryClient:
+        endpoint: http://localhost:9081
+      kafka:
+        binder:
+          brokers: PLAINTEXT_HOST://localhost:30092
+          min-partition-count: 1
+          replication-factor: 1
+          useNativeDecoding: true
+        bindings:
+          sampleInput:
+            consumer:
+              configuration:
+                schema.registry.url: http://localhost:9081
+                specific.avro.reader: true
+                key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                max:
+                  poll:
+                    records: 100
+                    interval.ms: 900000
+      bindings:
+        sampleInput:
+          contentType: application/*+avro
+          destination: redisandkafka.local.sample_event
+          group: sample.local.sample_event
+        sampleOutput:
+          contentType: application/*+avro
+          destination: redisandkafka.local.sample_event_output
+          group: sample.local.sample_event
+
+security.basic.enable: false
+management.security.enabled: false
+security.ignored: /**
