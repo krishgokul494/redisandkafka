@@ -20,6 +20,12 @@ spring:
         endpoint: http://localhost:9081
       kafka:
         binder:
+          producer-properties:
+            schema.registry.url: http://localhost:9081
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+            value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
           brokers: PLAINTEXT_HOST://localhost:30092
           min-partition-count: 1
           replication-factor: 1
@@ -41,10 +47,14 @@ spring:
           contentType: application/*+avro
           destination: redisandkafka.local.sample_event
           group: sample.local.sample_event
+          consumer:
+            useNativeDecoding: true
         sampleOutput:
           contentType: application/*+avro
           destination: redisandkafka.local.sample_event_output
           group: sample.local.sample_event
+          producer:
+            useNativeEncoding: true
 
 security.basic.enable: false
 management.security.enabled: false
