@@ -27,7 +27,7 @@ spring:
           consumer-properties:
             schema.registry.url: http://localhost:9081
             key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value.deserializer: io.confluent.kafka.serializers.
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
           brokers: PLAINTEXT_HOST://localhost:30092
           min-partition-count: 1
